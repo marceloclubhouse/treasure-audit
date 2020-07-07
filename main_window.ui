@@ -146,7 +146,7 @@
           <item>
            <widget class="QPushButton" name="pushButton_remove_criterion">
             <property name="text">
-             <string>Remove Criterion</string>
+             <string>Remove Selected Criterion</string>
             </property>
            </widget>
           </item>
@@ -162,36 +162,36 @@
         <widget class="QWidget" name="verticalLayoutWidget_3">
          <layout class="QVBoxLayout" name="verticalLayout_8">
           <item>
-           <widget class="QLabel" name="label_plain_text">
+           <widget class="QLabel" name="label_inclusion">
             <property name="text">
-             <string>Plain Text</string>
+             <string>Inclusion Criterion</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="lineEdit_plain_text"/>
+           <widget class="QLineEdit" name="lineEdit_inclusion"/>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_add_plain_text">
+           <widget class="QPushButton" name="pushButton_inclusion">
             <property name="text">
-             <string>Add Plain Text</string>
+             <string>Add Inclusion Criterion</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QLabel" name="label_element">
+           <widget class="QLabel" name="label_exclusion">
             <property name="text">
-             <string>HTML Element (experimental)</string>
+             <string>Exclusion Criterion</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="lineEdit_html_element"/>
+           <widget class="QLineEdit" name="lineEdit_exclusion"/>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_add_element">
+           <widget class="QPushButton" name="pushButton_exclusion">
             <property name="text">
-             <string>Add HTML Element</string>
+             <string>Add Exclusion Criterion</string>
             </property>
            </widget>
           </item>

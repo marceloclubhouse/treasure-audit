@@ -9,6 +9,7 @@ matching pages.
 
 Revisions:
 - 2020/06/15 : First revision
+- 2020/07/07 : Added does_not_have_text() function
 
 Copyright (C) 2020 Marcelo Cubillos
 This software is licensed under the GPL v3, see LICENSE.txt
@@ -193,6 +194,24 @@ def has_text(web_pages: {str: WebPage}, text: str) -> {str: WebPage}:
             if text in line:
                 new_dict[w] = web_pages[w]
                 break
+    return new_dict
+
+
+def does_not_have_text(web_pages: {str: WebPage}, text: str) -> {str: WebPage}:
+    """
+    Given a dictionary of WebPages and a search term,
+    return another dictionary of WebPages in which
+    no pages contain that search term.
+    """
+    new_dict = dict()
+    for w in web_pages:
+        contains = False
+        for line in web_pages[w].get_html().splitlines():
+            if text in line:
+                contains = True
+                break
+        if not contains:
+            new_dict[w] = web_pages[w]
     return new_dict
 
 

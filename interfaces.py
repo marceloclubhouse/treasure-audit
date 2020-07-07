@@ -8,6 +8,8 @@ the inheritance.
 
 Revisions:
 - 2020/06/15 : First revision
+- 2020/07/07 : Removed HTML criteria functionality; replaced
+               it with inclusion criteria/exclusion criteria
 
 Copyright (C) 2020 Marcelo Cubillos
 This software is licensed under the GPL v3, see LICENSE.txt
@@ -18,7 +20,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.Qt import QThreadPool
 from PyQt5.QtWidgets import QMainWindow, QApplication, QDialog, QFileDialog
 from PyQt5.QtGui import QTextBlockFormat, QTextCursor
-from auditor import WebPage, has_element, has_text
+from auditor import WebPage, has_text, does_not_have_text
 from main_window import Ui_MainWindow
 from about_window import Ui_Dialog_about
 from threads import CrawlerThread
@@ -71,8 +73,8 @@ class AuditInterface(QMainWindow, Ui_MainWindow):
         self._imported_pages = list()
 
         # An example of self._criteria would be
-        # {"HTML": {"slideshow", "iframe"}, "RAW": {"<div id='contact'>", "container class='big'"}}
-        self._criteria = {'HTML': set(), 'RAW': set()}
+        # {'include': {'slideshow', 'contact'}, 'exclude': {'IMG_1024.jpg'}}
+        self._criteria = {'include': set(), 'exclude': set()}
 
         # Initialize the format/appearance for
         # QTextBrowser's highlighting done in
@@ -84,8 +86,8 @@ class AuditInterface(QMainWindow, Ui_MainWindow):
 
         # Link buttons
         self.pushButton_crawl.clicked.connect(self._crawl)
-        self.pushButton_add_element.clicked.connect(self._add_html_criteria)
-        self.pushButton_add_plain_text.clicked.connect(self._add_text_criteria)
+        self.pushButton_inclusion.clicked.connect(self._add_inclusion_criteria)
+        self.pushButton_exclusion.clicked.connect(self._add_exclusion_criteria)
         self.pushButton_clear_criteria.clicked.connect(self._clear_criteria)
         self.pushButton_remove_criterion.clicked.connect(self._remove_criterion)
 
@@ -179,7 +181,7 @@ class AuditInterface(QMainWindow, Ui_MainWindow):
         within self.pages.
         """
         self.listWidget_matched_pages.clear()
-        if self._criteria != {'HTML': set(), 'RAW': set()}:
+        if self._criteria != {'include': set(), 'exclude': set()}:
             for p in self.matched_pages:
                 self.listWidget_matched_pages.addItem(p)
         else:
@@ -191,7 +193,7 @@ class AuditInterface(QMainWindow, Ui_MainWindow):
         Update the text label of matched pages to reflect the number
         of pages that are currently matched
         """
-        if len(self._criteria['HTML']) > 0 or len(self._criteria['RAW']) > 0:
+        if len(self._criteria['include']) > 0 or len(self._criteria['exclude']) > 0:
             self.label_matched_pages.setText(f"Matched Pages ({len(self.matched_pages)})")
         elif len(self.pages) > 0:
             self.label_matched_pages.setText(f"Matched Pages ({len(self.pages)})")
@@ -206,10 +208,10 @@ class AuditInterface(QMainWindow, Ui_MainWindow):
         self.listWidget_search_criteria.clear()
         for c in self._criteria:
             for k in self._criteria[c]:
-                if c == "RAW":
+                if c == "include":
                     self.listWidget_search_criteria.addItem(k)
                 else:
-                    self.listWidget_search_criteria.addItem(f"HTML Container : {k}")
+                    self.listWidget_search_criteria.addItem(f"Exclude : {k}")
 
     def _update_browsers(self) -> None:
         """
@@ -238,10 +240,10 @@ class AuditInterface(QMainWindow, Ui_MainWindow):
         """
         if not self._highlight_pages:
             return
-        if len(self._criteria["RAW"]) == 0:
+        if len(self._criteria["include"]) == 0:
             return
 
-        for c in self._criteria["RAW"]:
+        for c in self._criteria["include"]:
 
             page = self.matched_pages[self.listWidget_matched_pages.currentItem().text()].get_html().splitlines()
             cursor = QTextCursor(self.textBrowser_page_html.document())
@@ -306,49 +308,40 @@ class AuditInterface(QMainWindow, Ui_MainWindow):
         except Exception as e:
             self._set_status(f"Couldn't open file {path[0]}, error: {e}")
 
-    def _add_html_criteria(self) -> None:
-        """
-        Add the text in lineEdit_html_element to the
-        dictionary of criteria if it matches with the
-        container regex pattern.
-        """
-
-        if self.lineEdit_html_element.text() == "":
-            self._set_status("HTML element must be specified to be added to list of criteria.")
-            return
-        else:
-            criteria_matches = re.match(AuditInterface.CONTAINER_REGEX, self.lineEdit_html_element.text())
-        if not criteria_matches:
-            self._set_status(f"Cannot add HTML element {self.lineEdit_html_element.text()}, invalid container code.")
-            return
-        if criteria_matches["container"] in self._criteria["HTML"]:
-            self._set_status(f"Cannot overwrite attributes; remove attribute {criteria_matches['container']}.")
-            return
-
-        self._criteria["HTML"].add(criteria_matches["container"])
-        self._update_criteria_display()
-        self._match()
-        self._update_pages()
-        self._set_status(f"Added HTML container \"{criteria_matches['container']}\" to criteria.")
-        self._reset_browsers()
-        self.lineEdit_html_element.setText("")
-
-    def _add_text_criteria(self) -> None:
+    def _add_inclusion_criteria(self) -> None:
         """
         Add text from lineEdit_plain_text to the
         dictionary of search criteria.
         """
-        if self.lineEdit_plain_text.text() == "":
+        if self.lineEdit_inclusion.text() == "":
             self._set_status("Text criteria must be specified to be added.")
             return
 
-        self._criteria["RAW"].add(self.lineEdit_plain_text.text())
+        self._criteria["include"].add(self.lineEdit_inclusion.text())
         self._update_criteria_display()
         self._match()
         self._update_pages()
-        self._set_status(f"Added text \"{self.lineEdit_plain_text.text()}\" to criteria.")
+        self._set_status(f"Added text \"{self.lineEdit_inclusion.text()}\" to inclusion criteria.")
         self._reset_browsers()
-        self.lineEdit_plain_text.setText("")
+        self.lineEdit_inclusion.setText("")
+        self._update_matched_pages_label()
+
+    def _add_exclusion_criteria(self) -> None:
+        """
+        Add text from lineEdit_plain_text to the
+        dictionary of search criteria.
+        """
+        if self.lineEdit_exclusion.text() == "":
+            self._set_status("Text criteria must be specified to be added.")
+            return
+
+        self._criteria["exclude"].add(self.lineEdit_exclusion.text())
+        self._update_criteria_display()
+        self._match()
+        self._update_pages()
+        self._set_status(f"Added text \"{self.lineEdit_exclusion.text()}\" to exclusion criteria.")
+        self._reset_browsers()
+        self.lineEdit_exclusion.setText("")
         self._update_matched_pages_label()
 
     def _clear_criteria(self) -> None:
@@ -356,7 +349,7 @@ class AuditInterface(QMainWindow, Ui_MainWindow):
         Reset self._criteria and repopulate
         listWidget_search_criteria.
         """
-        self._criteria = {'HTML': set(), 'RAW': set()}
+        self._criteria = {'include': set(), 'exclude': set()}
         self._update_criteria_display()
         self._update_pages()
         self._reset_browsers()
@@ -374,38 +367,36 @@ class AuditInterface(QMainWindow, Ui_MainWindow):
 
         if self.listWidget_search_criteria.currentItem():
             current_item = self.listWidget_search_criteria.currentItem().text()
-            if current_item[0:17] == "HTML Container : ":
-                self._criteria["HTML"].remove(current_item[17:])
+            if current_item[0:10] == "Exclude : ":
+                self._criteria["exclude"].remove(current_item[10:])
+                self._set_status(f"Removed criterion \"{current_item[10:]}\" from list of exclusion criteria.")
             else:
-                self._criteria["RAW"].remove(current_item)
+                self._criteria["include"].remove(current_item)
+                self._set_status(f"Removed criterion \"{current_item}\" from list of inclusion criteria.")
         else:
             return
 
         self._update_criteria_display()
         self._update_pages()
         self._reset_browsers()
-        self._set_status(f"Removed criterion \"{current_item}\" from list of criteria.")
         self._update_matched_pages_label()
 
     def _match(self) -> None:
         """
         Refine self.matched_pages to only include
-        pages that satisfy the criteria added to
-        self._criteria.
+        pages from self.pages that satisfy the criteria
+        added to self._criteria - in other words,
+        generate self.matched_pages.
         """
-        # An example of self._criteria would be
-        # {"HTML": {"slideshow", "iframe"}, "RAW": {"<div id='contact'>", "container class='big'"}}
-        if self._criteria == {'HTML': set(), 'RAW': set()}:
+
+        if self._criteria == {'include': set(), 'exclude': set()}:
             return
 
         self.matched_pages = self.pages
-        for c in self._criteria:
-            if c == "HTML":
-                for k in self._criteria["HTML"]:
-                    self.matched_pages = has_element(self.matched_pages, k)
-            elif c == "RAW":
-                for k in self._criteria["RAW"]:
-                    self.matched_pages = has_text(self.matched_pages, k)
+        for k in self._criteria["include"]:
+            self.matched_pages = has_text(self.matched_pages, k)
+        for k in self._criteria["exclude"]:
+            self.matched_pages = does_not_have_text(self.matched_pages, k)
         self._update_pages()
         self._update_matched_pages_label()
 
@@ -422,7 +413,7 @@ class AuditInterface(QMainWindow, Ui_MainWindow):
             file = open(path[0], 'w')
             content = f"List of matched pages on {date.today()} using criteria {str(self._criteria)}\n\n"
             content += '\n'.join(self.matched_pages) if \
-                len(self._criteria["HTML"]) > 0 or len(self._criteria["RAW"]) > 0 else '\n'.join(self.pages)
+                len(self._criteria["include"]) > 0 or len(self._criteria["exclude"]) > 0 else '\n'.join(self.pages)
             file.write(content)
             file.close()
             self._set_status(f"Saved matched pages to {path[0]}.")
