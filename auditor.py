@@ -8,8 +8,11 @@ through the set of pages for content and return a set of
 matching pages.
 
 Revisions:
-- 2020/06/15 : First revision
+- 2020/07/21 : Updated has_text() function to take "ignore"
+               parameter as a set, allowing certain matches
+               to be ignored
 - 2020/07/07 : Added does_not_have_text() function
+- 2020/06/15 : First revision
 
 Copyright (C) 2020 Marcelo Cubillos
 This software is licensed under the GPL v3, see LICENSE.txt
@@ -182,7 +185,7 @@ def has_element(web_pages: {str: WebPage}, container: str) -> {str: WebPage}:
     return new_dict
 
 
-def has_text(web_pages: {str: WebPage}, text: str) -> {str: WebPage}:
+def has_text(web_pages: {str: WebPage}, text: str, ignore: {str}) -> {str: WebPage}:
     """
     Given a dictionary of WebPages and a search term,
     return another dictionary of WebPages that contain
@@ -192,8 +195,14 @@ def has_text(web_pages: {str: WebPage}, text: str) -> {str: WebPage}:
     for w in web_pages:
         for line in web_pages[w].get_html().splitlines():
             if text in line:
-                new_dict[w] = web_pages[w]
-                break
+                contains = False
+                for e in ignore:
+                    if e in text:
+                        contains = True
+                        break
+                if not contains:
+                    new_dict[w] = web_pages[w]
+                    break
     return new_dict
 
 

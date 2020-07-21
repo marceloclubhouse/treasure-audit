@@ -7,9 +7,11 @@ every element of the UI to different methods contained within
 the inheritance.
 
 Revisions:
-- 2020/06/15 : First revision
+- 2020/07/20 : Replaced criteria attributes from inclusion/
+               exclusion to inclusion, ignored, and exclusion
 - 2020/07/07 : Removed HTML criteria functionality; replaced
                it with inclusion criteria/exclusion criteria
+- 2020/06/15 : First revision
 
 Copyright (C) 2020 Marcelo Cubillos
 This software is licensed under the GPL v3, see LICENSE.txt
@@ -73,8 +75,8 @@ class AuditInterface(QMainWindow, Ui_MainWindow):
         self._imported_pages = list()
 
         # An example of self._criteria would be
-        # {'include': {'slideshow', 'contact'}, 'exclude': {'IMG_1024.jpg'}}
-        self._criteria = {'include': set(), 'exclude': set()}
+        # {'include': {'Firefox', 'Internet Explorer'}, 'ignore': {'Firefox 21.1'}, exclude: {'Google Chrome'}}
+        self._criteria = {'include': set(), 'ignore': set(), "exclude": set()}
 
         # Initialize the format/appearance for
         # QTextBrowser's highlighting done in
@@ -86,8 +88,9 @@ class AuditInterface(QMainWindow, Ui_MainWindow):
 
         # Link buttons
         self.pushButton_crawl.clicked.connect(self._crawl)
-        self.pushButton_inclusion.clicked.connect(self._add_inclusion_criteria)
-        self.pushButton_exclusion.clicked.connect(self._add_exclusion_criteria)
+        self.pushButton_include.clicked.connect(self._add_inclusion_criteria)
+        self.pushButton_ignore.clicked.connect(self._add_ignore_criteria)
+        self.pushButton_exclude.clicked.connect(self._add_exclusion_criteria)
         self.pushButton_clear_criteria.clicked.connect(self._clear_criteria)
         self.pushButton_remove_criterion.clicked.connect(self._remove_criterion)
 
@@ -101,7 +104,7 @@ class AuditInterface(QMainWindow, Ui_MainWindow):
         self.actionRendered_HTML.triggered.connect(self._switch_rendered_view)
         self.actionCrawl.triggered.connect(self._crawl)
         self.actionOpen_Page_in_Web_Browser.triggered.connect(self._open_web_page)
-        self.actionReset_Criteria.triggered.connect(self._clear_criteria)
+        self.actionClear_Criteria.triggered.connect(self._clear_criteria)
         self.actionReset_Crawled_Pages.triggered.connect(self._clear_pages)
         self.actionQuit.triggered.connect(self._quit)
         self.actionHighlight_Matches.triggered.connect(self._set_highlight_pages)
@@ -181,7 +184,7 @@ class AuditInterface(QMainWindow, Ui_MainWindow):
         within self.pages.
         """
         self.listWidget_matched_pages.clear()
-        if self._criteria != {'include': set(), 'exclude': set()}:
+        if self._criteria != {'include': set(), 'ignore': set(), "exclude": set()}:
             for p in self.matched_pages:
                 self.listWidget_matched_pages.addItem(p)
         else:
@@ -208,9 +211,11 @@ class AuditInterface(QMainWindow, Ui_MainWindow):
         self.listWidget_search_criteria.clear()
         for c in self._criteria:
             for k in self._criteria[c]:
-                if c == "include":
-                    self.listWidget_search_criteria.addItem(k)
-                else:
+                if c == 'include':
+                    self.listWidget_search_criteria.addItem(f"Include : {k}")
+                elif c == 'ignore':
+                    self.listWidget_search_criteria.addItem(f"Ignore  : {k}")
+                elif c == 'exclude':
                     self.listWidget_search_criteria.addItem(f"Exclude : {k}")
 
     def _update_browsers(self) -> None:
@@ -240,7 +245,7 @@ class AuditInterface(QMainWindow, Ui_MainWindow):
         """
         if not self._highlight_pages:
             return
-        if len(self._criteria["include"]) == 0:
+        if len(self._criteria["include"]) == 0 and len(self._criteria["exclude"]) == 0:
             return
 
         for c in self._criteria["include"]:
@@ -258,8 +263,21 @@ class AuditInterface(QMainWindow, Ui_MainWindow):
                 block_pos = block.position()
                 cursor.setPosition(block_pos)
                 cursor.select(QTextCursor.LineUnderCursor)
+
+                # It would be preferable if you didn't have to manually
+                # format each block in white if it didn't contain the
+                # text, and would probably save a lot of processing time -
+                # especially on larger pages. That being said, if the else
+                # clause does not explicitly say to format the block as none,
+                # then PyQt won't format the matches as green.
                 if c in line:
-                    cursor.setBlockFormat(self.highlight_format_green)
+                    contains = False
+                    for e in self._criteria["ignore"]:
+                        if e in line:
+                            contains = True
+                            break
+                    if not contains:
+                        cursor.setBlockFormat(self.highlight_format_green)
                 else:
                     cursor.setBlockFormat(self.highlight_format_none)
 
@@ -308,40 +326,60 @@ class AuditInterface(QMainWindow, Ui_MainWindow):
         except Exception as e:
             self._set_status(f"Couldn't open file {path[0]}, error: {e}")
 
+    # In the future, depreciate these 3 separate methods into
+    # one method.
     def _add_inclusion_criteria(self) -> None:
         """
         Add text from lineEdit_plain_text to the
-        dictionary of search criteria.
+        dictionary of search criteria to include.
         """
-        if self.lineEdit_inclusion.text() == "":
+        if self.lineEdit_criterion.text() == "":
             self._set_status("Text criteria must be specified to be added.")
             return
 
-        self._criteria["include"].add(self.lineEdit_inclusion.text())
+        self._criteria["include"].add(self.lineEdit_criterion.text())
         self._update_criteria_display()
         self._match()
         self._update_pages()
-        self._set_status(f"Added text \"{self.lineEdit_inclusion.text()}\" to inclusion criteria.")
+        self._set_status(f"Added text \"{self.lineEdit_criterion.text()}\" to inclusion criteria.")
         self._reset_browsers()
-        self.lineEdit_inclusion.setText("")
+        self.lineEdit_criterion.setText("")
+        self._update_matched_pages_label()
+
+    def _add_ignore_criteria(self) -> None:
+        """
+        Add text from lineEdit_plain_text to the
+        dictionary of search criteria to ignore.
+        """
+        if self.lineEdit_criterion.text() == "":
+            self._set_status("Text criteria must be specified to be added.")
+            return
+
+        self._criteria["ignore"].add(self.lineEdit_criterion.text())
+        self._update_criteria_display()
+        self._match()
+        self._update_pages()
+        self._set_status(f"Added text \"{self.lineEdit_criterion.text()}\" to ignoring criteria.")
+        self._reset_browsers()
+        self.lineEdit_criterion.setText("")
         self._update_matched_pages_label()
 
     def _add_exclusion_criteria(self) -> None:
         """
         Add text from lineEdit_plain_text to the
-        dictionary of search criteria.
+        dictionary of search criteria to exclude.
         """
-        if self.lineEdit_exclusion.text() == "":
+        if self.lineEdit_criterion.text() == "":
             self._set_status("Text criteria must be specified to be added.")
             return
 
-        self._criteria["exclude"].add(self.lineEdit_exclusion.text())
+        self._criteria["exclude"].add(self.lineEdit_criterion.text())
         self._update_criteria_display()
         self._match()
         self._update_pages()
-        self._set_status(f"Added text \"{self.lineEdit_exclusion.text()}\" to exclusion criteria.")
+        self._set_status(f"Added text \"{self.lineEdit_criterion.text()}\" to exclusion criteria.")
         self._reset_browsers()
-        self.lineEdit_exclusion.setText("")
+        self.lineEdit_criterion.setText("")
         self._update_matched_pages_label()
 
     def _clear_criteria(self) -> None:
@@ -349,7 +387,7 @@ class AuditInterface(QMainWindow, Ui_MainWindow):
         Reset self._criteria and repopulate
         listWidget_search_criteria.
         """
-        self._criteria = {'include': set(), 'exclude': set()}
+        self._criteria = {'include': set(), 'ignore': set(), "exclude": set()}
         self._update_criteria_display()
         self._update_pages()
         self._reset_browsers()
@@ -367,15 +405,19 @@ class AuditInterface(QMainWindow, Ui_MainWindow):
 
         if self.listWidget_search_criteria.currentItem():
             current_item = self.listWidget_search_criteria.currentItem().text()
-            if current_item[0:10] == "Exclude : ":
+            if current_item[0:10] == "Include : ":
+                self._criteria["include"].remove(current_item[10:])
+                self._set_status(f"Removed criterion \"{current_item[10:]}\" from list of inclusion criteria.")
+            elif current_item[0:10] == "Ignore  : ":
+                self._criteria["ignore"].remove(current_item[9:])
+                self._set_status(f"Removed criterion \"{current_item[10:]}\" from list of ignoring criteria.")
+            else:
                 self._criteria["exclude"].remove(current_item[10:])
                 self._set_status(f"Removed criterion \"{current_item[10:]}\" from list of exclusion criteria.")
-            else:
-                self._criteria["include"].remove(current_item)
-                self._set_status(f"Removed criterion \"{current_item}\" from list of inclusion criteria.")
         else:
             return
 
+        self._match()
         self._update_criteria_display()
         self._update_pages()
         self._reset_browsers()
@@ -389,12 +431,12 @@ class AuditInterface(QMainWindow, Ui_MainWindow):
         generate self.matched_pages.
         """
 
-        if self._criteria == {'include': set(), 'exclude': set()}:
+        if self._criteria == {'include': set(), 'ignore': set(), 'exclude': set()}:
             return
 
         self.matched_pages = self.pages
         for k in self._criteria["include"]:
-            self.matched_pages = has_text(self.matched_pages, k)
+            self.matched_pages = has_text(self.matched_pages, k, self._criteria["exclude"])
         for k in self._criteria["exclude"]:
             self.matched_pages = does_not_have_text(self.matched_pages, k)
         self._update_pages()

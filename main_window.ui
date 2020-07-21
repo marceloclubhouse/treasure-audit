@@ -21,7 +21,7 @@
   </property>
   <property name="windowIcon">
    <iconset>
-    <normaloff>icon_logo.png</normaloff>icon_logo.png</iconset>
+    <normaloff>../../../.designer/backup/icon_logo.png</normaloff>../../../.designer/backup/icon_logo.png</iconset>
   </property>
   <property name="toolButtonStyle">
    <enum>Qt::ToolButtonIconOnly</enum>
@@ -33,87 +33,77 @@
    <property name="enabled">
     <bool>true</bool>
    </property>
-   <layout class="QVBoxLayout" name="verticalLayout_11">
+   <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,0">
+     <widget class="QLabel" name="label_url">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>URL</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout">
       <property name="sizeConstraint">
        <enum>QLayout::SetFixedSize</enum>
       </property>
-      <property name="bottomMargin">
-       <number>0</number>
-      </property>
       <item>
-       <widget class="QLabel" name="label_url">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
+       <widget class="QComboBox" name="comboBox_schema">
+        <property name="currentText">
+         <string>https://</string>
         </property>
+        <property name="currentIndex">
+         <number>0</number>
+        </property>
+        <item>
+         <property name="text">
+          <string>https://</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>http://</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="lineEdit_url">
         <property name="text">
-         <string>URL</string>
+         <string/>
         </property>
        </widget>
       </item>
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout">
-        <property name="sizeConstraint">
-         <enum>QLayout::SetFixedSize</enum>
+       <widget class="QPushButton" name="pushButton_crawl">
+        <property name="text">
+         <string>Crawl</string>
         </property>
-        <item>
-         <widget class="QComboBox" name="comboBox_schema">
-          <property name="currentText">
-           <string>http://</string>
-          </property>
-          <property name="currentIndex">
-           <number>0</number>
-          </property>
-          <item>
-           <property name="text">
-            <string>http://</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>https://</string>
-           </property>
-          </item>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLineEdit" name="lineEdit_url">
-          <property name="text">
-           <string/>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="pushButton_crawl">
-          <property name="text">
-           <string>Crawl</string>
-          </property>
-          <property name="checkable">
-           <bool>false</bool>
-          </property>
-          <property name="flat">
-           <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-       </layout>
+        <property name="checkable">
+         <bool>false</bool>
+        </property>
+        <property name="flat">
+         <bool>false</bool>
+        </property>
+       </widget>
       </item>
      </layout>
     </item>
     <item>
-     <widget class="QSplitter" name="splitter_3">
+     <widget class="QSplitter" name="splitter_2">
       <property name="orientation">
        <enum>Qt::Vertical</enum>
       </property>
-      <widget class="QSplitter" name="splitter_2">
+      <widget class="QSplitter" name="splitter">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
-       <widget class="QWidget" name="verticalLayoutWidget_2">
+       <widget class="QWidget" name="">
         <layout class="QVBoxLayout" name="verticalLayout_3">
          <item>
           <widget class="QLabel" name="label_matched_pages">
@@ -127,76 +117,74 @@
          </item>
         </layout>
        </widget>
-       <widget class="QSplitter" name="splitter">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-        <widget class="QWidget" name="verticalLayoutWidget">
-         <layout class="QVBoxLayout" name="verticalLayout_5">
-          <item>
-           <widget class="QLabel" name="label_match_criteria">
-            <property name="text">
-             <string>Match Criteria</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QListWidget" name="listWidget_search_criteria"/>
-          </item>
-          <item>
-           <widget class="QPushButton" name="pushButton_remove_criterion">
-            <property name="text">
-             <string>Remove Selected Criterion</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="pushButton_clear_criteria">
-            <property name="text">
-             <string>Clear Criteria</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-        <widget class="QWidget" name="verticalLayoutWidget_3">
-         <layout class="QVBoxLayout" name="verticalLayout_8">
-          <item>
-           <widget class="QLabel" name="label_inclusion">
-            <property name="text">
-             <string>Inclusion Criterion</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="lineEdit_inclusion"/>
-          </item>
-          <item>
-           <widget class="QPushButton" name="pushButton_inclusion">
-            <property name="text">
-             <string>Add Inclusion Criterion</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="label_exclusion">
-            <property name="text">
-             <string>Exclusion Criterion</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="lineEdit_exclusion"/>
-          </item>
-          <item>
-           <widget class="QPushButton" name="pushButton_exclusion">
-            <property name="text">
-             <string>Add Exclusion Criterion</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
+       <widget class="QWidget" name="">
+        <layout class="QVBoxLayout" name="verticalLayout_5">
+         <item>
+          <widget class="QLabel" name="label_match_criteria">
+           <property name="text">
+            <string>Match Criteria</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QListWidget" name="listWidget_search_criteria"/>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton_remove_criterion">
+           <property name="text">
+            <string>Remove Selected Criterion</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton_clear_criteria">
+           <property name="text">
+            <string>Clear Criteria</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_criterion">
+           <property name="text">
+            <string>Add Criterion</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="lineEdit_criterion"/>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_3">
+           <item>
+            <widget class="QPushButton" name="pushButton_include">
+             <property name="text">
+              <string>Include</string>
+             </property>
+             <property name="checkable">
+              <bool>false</bool>
+             </property>
+             <property name="flat">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pushButton_ignore">
+             <property name="text">
+              <string>Ignore</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pushButton_exclude">
+             <property name="text">
+              <string>Exclude</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
        </widget>
       </widget>
       <widget class="QWidget" name="verticalLayoutWidget_4">
@@ -312,7 +300,7 @@
     </property>
     <addaction name="actionCrawl"/>
     <addaction name="actionOpen_Page_in_Web_Browser"/>
-    <addaction name="actionReset_Criteria"/>
+    <addaction name="actionClear_Criteria"/>
    </widget>
    <widget class="QMenu" name="menuView">
     <property name="title">
@@ -338,7 +326,7 @@
   <action name="actionOpen">
    <property name="icon">
     <iconset>
-     <normaloff>feather/upload.svg</normaloff>feather/upload.svg</iconset>
+     <normaloff>../../../.designer/backup/feather/upload.svg</normaloff>../../../.designer/backup/feather/upload.svg</iconset>
    </property>
    <property name="text">
     <string>Open... </string>
@@ -384,13 +372,13 @@
     <string>Reset (Ctrl+R)</string>
    </property>
   </action>
-  <action name="actionReset_Criteria">
+  <action name="actionClear_Criteria">
    <property name="icon">
     <iconset>
      <normaloff>feather/x.svg</normaloff>feather/x.svg</iconset>
    </property>
    <property name="text">
-    <string>Reset Search Criteria</string>
+    <string>Clear Search Criteria</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+R</string>
@@ -411,7 +399,7 @@
   <action name="actionRendered_HTML">
    <property name="icon">
     <iconset>
-     <normaloff>feather/file-text.svg</normaloff>feather/file-text.svg</iconset>
+     <normaloff>feather/monitor.svg</normaloff>feather/monitor.svg</iconset>
    </property>
    <property name="text">
     <string>Offline Render</string>
@@ -423,7 +411,7 @@
   <action name="actionOnline_Webpage_Ctrl_E">
    <property name="icon">
     <iconset>
-     <normaloff>../../../../Downloads/feather/cloud.svg</normaloff>../../../../Downloads/feather/cloud.svg</iconset>
+     <normaloff>../../../../../Downloads/feather/cloud.svg</normaloff>../../../../../Downloads/feather/cloud.svg</iconset>
    </property>
    <property name="text">
     <string>Online Webpage (Ctrl+E)</string>
@@ -435,7 +423,7 @@
   <action name="actionCrawl">
    <property name="icon">
     <iconset>
-     <normaloff>feather/map.svg</normaloff>feather/map.svg</iconset>
+     <normaloff>feather/layers.svg</normaloff>feather/layers.svg</iconset>
    </property>
    <property name="text">
     <string>Crawl </string>
@@ -447,7 +435,7 @@
   <action name="actionMatch">
    <property name="icon">
     <iconset>
-     <normaloff>feather/tag.svg</normaloff>feather/tag.svg</iconset>
+     <normaloff>../../../.designer/backup/feather/tag.svg</normaloff>../../../.designer/backup/feather/tag.svg</iconset>
    </property>
    <property name="text">
     <string>Match</string>
@@ -481,6 +469,10 @@
    </property>
   </action>
   <action name="actionAbout">
+   <property name="icon">
+    <iconset>
+     <normaloff>feather/users.svg</normaloff>feather/users.svg</iconset>
+   </property>
    <property name="text">
     <string>About</string>
    </property>
