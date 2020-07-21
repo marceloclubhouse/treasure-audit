@@ -35,7 +35,7 @@
    <iconset>
     <normaloff>../../../.designer/backup/icon.png</normaloff>../../../.designer/backup/icon.png</iconset>
   </property>
-  <widget class="QLabel" name="label_2">
+  <widget class="QLabel" name="label_logo">
    <property name="geometry">
     <rect>
      <x>160</x>
@@ -48,7 +48,7 @@
     <string/>
    </property>
    <property name="pixmap">
-    <pixmap>icon_logo.png</pixmap>
+    <pixmap>resources/icon_logo.png</pixmap>
    </property>
    <property name="scaledContents">
     <bool>true</bool>
@@ -526,7 +526,7 @@
     </sizepolicy>
    </property>
    <property name="text">
-    <string>v 0.1.0
+    <string>v 0.1.2
 Copyright (c) 2020 Marcelo Cubillos
 Licensed under GPL v3.0
 

@@ -21,7 +21,7 @@ for more information.
 from PyQt5.QtCore import Qt
 from PyQt5.Qt import QThreadPool
 from PyQt5.QtWidgets import QMainWindow, QApplication, QDialog, QFileDialog
-from PyQt5.QtGui import QTextBlockFormat, QTextCursor
+from PyQt5.QtGui import QTextBlockFormat, QTextCursor, QIcon, QPixmap
 from auditor import WebPage, has_text, does_not_have_text
 from main_window import Ui_MainWindow
 from about_window import Ui_Dialog_about
@@ -30,9 +30,32 @@ from webbrowser import open_new
 import re
 from sys import exit
 from datetime import date
+import os
+import sys
 
 
-class AboutWindow(QDialog, Ui_Dialog_about):
+class Window:
+    """
+    Abstract base class for defining GUI windows
+    """
+    @staticmethod
+    def resource_path(relative_path):
+        """
+        Get absolute path to resource. Used from:
+        https://stackoverflow.com/questions/52654805/
+        """
+        base_path = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
+        return os.path.join(base_path, relative_path)
+
+    @staticmethod
+    def _quit():
+        """
+        Close the application.
+        """
+        exit()
+
+
+class AboutWindow(Window, QDialog, Ui_Dialog_about):
     """
     A callable GUI interface for the about window
     """
@@ -40,9 +63,10 @@ class AboutWindow(QDialog, Ui_Dialog_about):
     def __init__(self):
         super(AboutWindow, self).__init__()
         self.setupUi(self)
+        self.label_logo.setPixmap(QPixmap(self.resource_path('resources/icon_logo.png')))
 
 
-class AuditInterface(QMainWindow, Ui_MainWindow):
+class AuditInterface(Window, QMainWindow, Ui_MainWindow):
     """
     The AuditInterface class represents a callable
     GUI interface.
@@ -65,6 +89,20 @@ class AuditInterface(QMainWindow, Ui_MainWindow):
 
         self.about_window = AboutWindow()
         self.thread_pool = QThreadPool()
+
+        # Import/set icons
+        self.setWindowIcon(QIcon(self.resource_path('resources/icon_logo.ico')))
+        self.actionImport.setIcon(QIcon(self.resource_path('feather/upload.svg')))
+        self.actionExport.setIcon(QIcon(self.resource_path('feather/download.svg')))
+        self.actionQuit.setIcon(QIcon(self.resource_path('feather/x-octagon.svg')))
+        self.actionCrawl.setIcon(QIcon(self.resource_path('feather/layers.svg')))
+        self.actionOpen_Page_in_Web_Browser.setIcon(QIcon(self.resource_path('feather/external-link.svg')))
+        self.actionClear_Criteria.setIcon(QIcon(self.resource_path('feather/x.svg')))
+        self.actionRaw_HTML.setIcon(QIcon(self.resource_path('feather/code.svg')))
+        self.actionRendered_HTML.setIcon(QIcon(self.resource_path('feather/monitor.svg')))
+        self.actionHighlight_Matches.setIcon(QIcon(self.resource_path('feather/edit-3.svg')))
+        self.actionVisit_Help_Page.setIcon(QIcon(self.resource_path('feather/info.svg')))
+        self.actionAbout.setIcon(QIcon(self.resource_path('feather/users.svg')))
 
         # _pages and _matched_pages will be in
         # the format {"URL": WebPage(URL)}
@@ -110,13 +148,6 @@ class AuditInterface(QMainWindow, Ui_MainWindow):
         self.actionHighlight_Matches.triggered.connect(self._set_highlight_pages)
         self.actionExport.triggered.connect(self._activate_save_file_dialog)
         self.actionImport.triggered.connect(self._activate_open_file_dialog)
-
-    @staticmethod
-    def _quit():
-        """
-        Close the application.
-        """
-        exit()
 
     def _set_status(self, status: str) -> None:
         """
@@ -214,7 +245,7 @@ class AuditInterface(QMainWindow, Ui_MainWindow):
                 if c == 'include':
                     self.listWidget_search_criteria.addItem(f"Include : {k}")
                 elif c == 'ignore':
-                    self.listWidget_search_criteria.addItem(f"Ignore  : {k}")
+                    self.listWidget_search_criteria.addItem(f"Ignore : {k}")
                 elif c == 'exclude':
                     self.listWidget_search_criteria.addItem(f"Exclude : {k}")
 
@@ -408,9 +439,9 @@ class AuditInterface(QMainWindow, Ui_MainWindow):
             if current_item[0:10] == "Include : ":
                 self._criteria["include"].remove(current_item[10:])
                 self._set_status(f"Removed criterion \"{current_item[10:]}\" from list of inclusion criteria.")
-            elif current_item[0:10] == "Ignore  : ":
+            elif current_item[0:9] == "Ignore : ":
                 self._criteria["ignore"].remove(current_item[9:])
-                self._set_status(f"Removed criterion \"{current_item[10:]}\" from list of ignoring criteria.")
+                self._set_status(f"Removed criterion \"{current_item[9:]}\" from list of ignoring criteria.")
             else:
                 self._criteria["exclude"].remove(current_item[10:])
                 self._set_status(f"Removed criterion \"{current_item[10:]}\" from list of exclusion criteria.")
