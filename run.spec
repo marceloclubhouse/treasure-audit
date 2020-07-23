@@ -1,0 +1,45 @@
+# -*- mode: python ; coding: utf-8 -*-
+
+block_cipher = None
+
+
+a = Analysis(['run.py'],
+             pathex=['/home/marcelo/Dropbox/GitHub/Treasure Audit'],
+             binaries=[],
+             datas=[('resources/icon_logo.ico', 'resources'),
+                    ('resources/icon_logo.png', 'resources'),
+                    ('feather/upload.svg', 'feather'),
+                    ('feather/download.svg', 'feather'),
+                    ('feather/x-octagon.svg', 'feather'),
+                    ('feather/layers.svg', 'feather'),
+                    ('feather/external-link.svg', 'feather'),
+                    ('feather/x.svg', 'feather'),
+                    ('feather/code.svg', 'feather'),
+                    ('feather/monitor.svg', 'feather'),
+                    ('feather/edit-3.svg', 'feather'),
+                    ('feather/info.svg', 'feather'),
+		            ('feather/users.svg', 'feather')],
+             hiddenimports=[],
+             hookspath=[],
+             runtime_hooks=[],
+             excludes=[],
+             win_no_prefer_redirects=False,
+             win_private_assemblies=False,
+             cipher=block_cipher,
+             noarchive=False)
+pyz = PYZ(a.pure, a.zipped_data,
+             cipher=block_cipher)
+exe = EXE(pyz,
+          a.scripts,
+          a.binaries,
+          a.zipfiles,
+          a.datas,
+          [],
+          name='Treasure Audit',
+          debug=False,
+          bootloader_ignore_signals=False,
+          strip=False,
+          upx=True,
+          upx_exclude=[],
+          runtime_tmpdir=None,
+          console=True , icon='resources/icon_logo.ico')
