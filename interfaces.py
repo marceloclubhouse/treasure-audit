@@ -467,7 +467,7 @@ class AuditInterface(Window, QMainWindow, Ui_MainWindow):
 
         self.matched_pages = self.pages
         for k in self._criteria["include"]:
-            self.matched_pages = has_text(self.matched_pages, k, self._criteria["exclude"])
+            self.matched_pages = has_text(self.matched_pages, k, self._criteria["ignore"])
         for k in self._criteria["exclude"]:
             self.matched_pages = does_not_have_text(self.matched_pages, k)
         self._update_pages()

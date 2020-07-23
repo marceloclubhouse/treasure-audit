@@ -197,7 +197,7 @@ def has_text(web_pages: {str: WebPage}, text: str, ignore: {str}) -> {str: WebPa
             if text in line:
                 contains = False
                 for e in ignore:
-                    if e in text:
+                    if e in line:
                         contains = True
                         break
                 if not contains:
