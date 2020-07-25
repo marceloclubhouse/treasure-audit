@@ -36,31 +36,43 @@ Choose a schema and enter the URL of the website you want to crawl then click Cr
 <p align="center">
   <img src="https://raw.githubusercontent.com/marceloclubhouse/treasure-audit/master/images/Screenshot%20from%202020-07-24%2014-33-43.png">
 </p>
+
 Add your criteria to narrow down the list of matched pages.
+
 <p align="center">
   <img src="https://raw.githubusercontent.com/marceloclubhouse/treasure-audit/master/images/Screenshot%20from%202020-07-24%2014-37-11.png">
 </p>
+
 After the pages are crawled, you can click on the individual pages to view their HTML, or you can choose to render the pages in a boxed web browser (without any assets like CSS, JS, or images)
+
 <p align="center">
   <img src="https://raw.githubusercontent.com/marceloclubhouse/treasure-audit/master/images/Screenshot%20from%202020-07-24%2014-37-56.png">
 </p>
-If you want to see where your criteria matches within the HTML, you can enable highlighting by going to __View > Highlight Matches__, which will highlight your matches in green within the HTML viewer.
+
+If you want to see where your criteria matches within the HTML, you can enable highlighting by going to View > Highlight Matches, which will highlight your matches in green within the HTML viewer.
+
 <p align="center">
   <img src="https://raw.githubusercontent.com/marceloclubhouse/treasure-audit/master/images/Screen-Shot-2020-07-17-at-1.27.20-PM.png">
 </p>
+
 At which point you can scroll through the HTML viewer to find the match.
+
 <p align="center">
   <img src="https://raw.githubusercontent.com/marceloclubhouse/treasure-audit/master/images/Screenshot%20from%202020-07-24%2014-41-40.png">
 </p>
+
 If you find a match that you don’t want to include, you can copy and paste it into the criterion box and choose to ignore it
+
 <p align="center">
   <img src="https://raw.githubusercontent.com/marceloclubhouse/treasure-audit/master/images/Screenshot%20from%202020-07-24%2014-42-58.png">
 </p>
-You can open the page you’re viewing in an external web browser by either going to __Menu > Edit > Open Page__ in Web Browser
+You can open the page you’re viewing in an external web browser by either going to Menu > Edit > Open Page in Web Browser
 <p align="center">
   <img src="https://raw.githubusercontent.com/marceloclubhouse/treasure-audit/master/images/Screen-Shot-2020-07-17-at-1.29.54-PM.png">
 </p>
+
 which will open the page in your default browser.
+
 <p align="center">
   <img src="https://raw.githubusercontent.com/marceloclubhouse/treasure-audit/master/images/Screen-Shot-2020-07-17-at-1.31.24-PM-1024x505.png">
 </p>
