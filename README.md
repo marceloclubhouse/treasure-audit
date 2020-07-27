@@ -76,3 +76,10 @@ which will open the page in your default browser.
 <p align="center">
   <img src="https://raw.githubusercontent.com/marceloclubhouse/treasure-audit/master/images/Screen-Shot-2020-07-17-at-1.31.24-PM-1024x505.png">
 </p>
+
+## Credits
+- Logo – Shamash Teran
+- Icons – Cole Bemis
+- GUI and Software – Marcelo Cubillos
+
+Treasure Audit is provided under the GPL v3 License. See LICENSE.txt for more information.
