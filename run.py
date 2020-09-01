@@ -7,6 +7,8 @@ receives the signal to quit.
 
 Revisions:
 - 2020/06/15 : First revision
+- 2020/08/31 : Updated interface to use fusion mode (looks
+               so much better on macOS!)
 
 Copyright (C) 2020 Marcelo Cubillos
 This software is licensed under the GPL v3, see LICENSE.txt
@@ -21,6 +23,7 @@ if __name__ == '__main__':
 
     app = QApplication(sys.argv)
     app.setApplicationName("Treasure Audit")
+    app.setStyle('Fusion')
     user_interface = AuditInterface()
     user_interface.show()
     sys.exit(app.exec_())
