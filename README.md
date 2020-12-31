@@ -1,5 +1,5 @@
 # Treasure Audit
-### The simple web spider with a desktop interface
+### A simple web spider with a desktop interface
 
 Treasure Audit is a multi-platform desktop Web spider that allows users to crawl and search websites, without having to worry about out-of-date content as a result of caching.
 
