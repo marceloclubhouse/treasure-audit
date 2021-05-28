@@ -161,6 +161,8 @@ class AuditInterface(Window, QMainWindow, Ui_MainWindow):
         of WebPage objects.
         """
         self.pages = pages
+        self._update_pages()
+        self._update_matched_pages_label();
 
     def _clear_pages(self):
         """
@@ -214,6 +216,7 @@ class AuditInterface(Window, QMainWindow, Ui_MainWindow):
         Update the pages listWidget to reflect the WebPages
         within self.pages.
         """
+        current_item = self.listWidget_matched_pages.currentIndex()
         self.listWidget_matched_pages.clear()
         if self._criteria != {'include': set(), 'ignore': set(), "exclude": set()}:
             for p in self.matched_pages:
@@ -221,6 +224,7 @@ class AuditInterface(Window, QMainWindow, Ui_MainWindow):
         else:
             for p in self.pages:
                 self.listWidget_matched_pages.addItem(p)
+        self.listWidget_matched_pages.setCurrentIndex(current_item)
 
     def _update_matched_pages_label(self) -> None:
         """

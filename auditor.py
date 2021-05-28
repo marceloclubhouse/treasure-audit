@@ -146,32 +146,6 @@ class WebPage:
         return internal_links
 
 
-def find_all_pages(current_page: WebPage, traversed_pages=dict()) -> {str: WebPage}:
-    """
-    Crawl a WebPage recursively and return a dictionary 
-    of all the internal pages that can be traversed from
-    that URL.
-    """
-    # Add current page WebPage object to the traversed
-    # pages dictionary, with URL string as its key
-    traversed_pages[current_page.get_url()] = current_page
-
-    for p in current_page.get_internal_links():
-        if p not in traversed_pages and re.match(WebPage.URL_REGEX, p):
-
-            # Try to create a WebPage object from each URL found,
-            # but if there's something wrong with the anchor,
-            # such as it lacking a href value or linking to a
-            # page that generates an error, just skip
-            # that page and continue crawling.
-            try:
-                traversed_pages.update(find_all_pages(WebPage(p), traversed_pages))
-            except Exception as e:
-                print(f"Error crawling {p}: {e}")
-
-    return traversed_pages
-
-
 def has_element(web_pages: {str: WebPage}, container: str) -> {str: WebPage}:
     """
     Given a dictionary of WebPages and element attributes,
