@@ -7,6 +7,8 @@ every element of the UI to different methods contained within
 the inheritance.
 
 Revisions:
+- 2021/05/28 : Updated threads to refresh UI for every page
+               crawled
 - 2020/07/20 : Replaced criteria attributes from inclusion/
                exclusion to inclusion, ignored, and exclusion
 - 2020/07/07 : Removed HTML criteria functionality; replaced
