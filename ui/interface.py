@@ -1,5 +1,5 @@
 """
-Treasure Audit - interfaces.py
+Treasure Audit - interface.py
 
 Interfaces contains the script for the main GUI. It inherits
 all of the visual elements from main_window.py and connects
@@ -24,10 +24,10 @@ from PyQt5.QtCore import Qt
 from PyQt5.Qt import QThreadPool
 from PyQt5.QtWidgets import QMainWindow, QApplication, QDialog, QFileDialog
 from PyQt5.QtGui import QTextBlockFormat, QTextCursor, QIcon, QPixmap
-from auditor import WebPage, has_text, does_not_have_text
-from main_window import Ui_MainWindow
-from about_window import Ui_Dialog_about
-from threads import CrawlerThread
+from crawler.auditor import WebPage, has_text, does_not_have_text
+from ui.main_window import Ui_MainWindow
+from ui.about_window import Ui_Dialog_about
+from crawler.threads import CrawlerThread
 from webbrowser import open_new
 import re
 from sys import exit
@@ -65,7 +65,7 @@ class AboutWindow(Window, QDialog, Ui_Dialog_about):
     def __init__(self):
         super(AboutWindow, self).__init__()
         self.setupUi(self)
-        self.label_logo.setPixmap(QPixmap(self.resource_path('resources/icon_logo.png')))
+        self.label_logo.setPixmap(QPixmap(self.resource_path('../resources/icon_logo.png')))
 
 
 class AuditInterface(Window, QMainWindow, Ui_MainWindow):
@@ -93,18 +93,18 @@ class AuditInterface(Window, QMainWindow, Ui_MainWindow):
         self.thread_pool = QThreadPool()
 
         # Import/set icons
-        self.setWindowIcon(QIcon(self.resource_path('resources/icon_logo.ico')))
-        self.actionImport.setIcon(QIcon(self.resource_path('feather/upload.svg')))
-        self.actionExport.setIcon(QIcon(self.resource_path('feather/download.svg')))
-        self.actionQuit.setIcon(QIcon(self.resource_path('feather/x-octagon.svg')))
-        self.actionCrawl.setIcon(QIcon(self.resource_path('feather/layers.svg')))
-        self.actionOpen_Page_in_Web_Browser.setIcon(QIcon(self.resource_path('feather/external-link.svg')))
-        self.actionClear_Criteria.setIcon(QIcon(self.resource_path('feather/x.svg')))
-        self.actionRaw_HTML.setIcon(QIcon(self.resource_path('feather/code.svg')))
-        self.actionRendered_HTML.setIcon(QIcon(self.resource_path('feather/monitor.svg')))
-        self.actionHighlight_Matches.setIcon(QIcon(self.resource_path('feather/edit-3.svg')))
-        self.actionVisit_Help_Page.setIcon(QIcon(self.resource_path('feather/info.svg')))
-        self.actionAbout.setIcon(QIcon(self.resource_path('feather/users.svg')))
+        self.setWindowIcon(QIcon(self.resource_path('../resources/icon_logo.ico')))
+        self.actionImport.setIcon(QIcon(self.resource_path('../feather/upload.svg')))
+        self.actionExport.setIcon(QIcon(self.resource_path('../feather/download.svg')))
+        self.actionQuit.setIcon(QIcon(self.resource_path('../feather/x-octagon.svg')))
+        self.actionCrawl.setIcon(QIcon(self.resource_path('../feather/layers.svg')))
+        self.actionOpen_Page_in_Web_Browser.setIcon(QIcon(self.resource_path('../feather/external-link.svg')))
+        self.actionClear_Criteria.setIcon(QIcon(self.resource_path('../feather/x.svg')))
+        self.actionRaw_HTML.setIcon(QIcon(self.resource_path('../feather/code.svg')))
+        self.actionRendered_HTML.setIcon(QIcon(self.resource_path('../feather/monitor.svg')))
+        self.actionHighlight_Matches.setIcon(QIcon(self.resource_path('../feather/edit-3.svg')))
+        self.actionVisit_Help_Page.setIcon(QIcon(self.resource_path('../feather/info.svg')))
+        self.actionAbout.setIcon(QIcon(self.resource_path('../feather/users.svg')))
 
         # _pages and _matched_pages will be in
         # the format {"URL": WebPage(URL)}
