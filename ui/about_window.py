@@ -28,7 +28,7 @@ class Ui_Dialog_about(object):
         self.label_logo = QtWidgets.QLabel(Dialog_about)
         self.label_logo.setGeometry(QtCore.QRect(160, 30, 81, 81))
         self.label_logo.setText("")
-        self.label_logo.setPixmap(QtGui.QPixmap("resources/icon_logo.png"))
+        self.label_logo.setPixmap(QtGui.QPixmap("../resources/icon_logo.png"))
         self.label_logo.setScaledContents(True)
         self.label_logo.setObjectName("label_logo")
         self.label_4 = QtWidgets.QLabel(Dialog_about)

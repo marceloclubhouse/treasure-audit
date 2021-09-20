@@ -16,7 +16,7 @@ for more information.
 """
 
 import re
-from auditor import WebPage
+from crawler.auditor import WebPage
 from PyQt5.Qt import QRunnable, pyqtSlot, pyqtSignal, QObject
 
 

@@ -16,7 +16,7 @@ for more information.
 """
 
 from PyQt5.Qt import QApplication
-from interfaces import AuditInterface
+from ui.interface import AuditInterface
 
 if __name__ == '__main__':
     import sys
