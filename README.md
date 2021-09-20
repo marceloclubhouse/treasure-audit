@@ -14,7 +14,8 @@ Treasure Audit is a multi-platform desktop Web spider that allows users to crawl
 - Linux, Mac, and Windows compatibility
 
 ## Binaries
-You can download the compiled binaries from GitHub for Linux, Mac, and Windows: https://github.com/marceloclubhouse/treasure-audit/releases/tag/v0.1.2
+You can download the compiled binaries from GitHub for Linux, Mac, and Windows: 
+https://github.com/marceloclubhouse/treasure-audit/releases/tag/v0.1.3
 
 ## Manual Installation
 Download and install Python from
